@@ -16,7 +16,7 @@ export default function ManageNetwork({
 
   return (
     <Card className='rounded-xl overflow-hidden shadow-lg border border-gray-200'>
-      <CardHeader className='bg-gradient-to-r from-red-500 to-red-500/80 text-white py-3 md:py-4'>
+      <CardHeader className='bg-gradient-to-r from-red-900 from-red-800 text-white py-3 md:py-4'>
         <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0'>
           <CardTitle className='text-white text-lg md:text-xl font-bold flex items-center'>
             <Network className='w-4 h-4 md:w-5 md:h-5 mr-2' />

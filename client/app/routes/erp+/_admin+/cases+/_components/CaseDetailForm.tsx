@@ -60,7 +60,7 @@ export default function CaseDetailForm({
 
   // State for case service form fields
   const [code, setCode] = useState<string>('');
-  const [date, setDate] = useState<Date>(new Date());
+  const [createdAt, setCreatedAt] = useState<Date>(new Date());
   const [appointmentDate, setAppointmentDate] = useState<Date | null>(null);
 
   // Event location address state
@@ -82,7 +82,6 @@ export default function CaseDetailForm({
     null,
   );
 
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
 
   // Process status flags
@@ -104,8 +103,10 @@ export default function CaseDetailForm({
   useEffect(() => {
     const newDistricts = getDistrictsByProvinceCode(eventProvince.code);
     setEventDistricts(newDistricts);
-    setEventDistrict(newDistricts[0] || eventDistricts[0]);
-  }, [eventProvince]);
+    if (eventDistrict.provinceCode !== eventProvince.code) {
+      setEventDistrict(newDistricts[0] || eventDistricts[0]);
+    }
+  }, [eventProvince.code]);
 
   // Generate case service code based on customer code
   const generateCaseServiceCode = async () => {
@@ -183,7 +184,7 @@ export default function CaseDetailForm({
 
     // Add all the form fields
     formData.append('code', code);
-    formData.append('date', format(date, 'yyyy-MM-dd'));
+    formData.append('createdAt', format(createdAt, 'yyyy-MM-dd'));
     if (appointmentDate) {
       formData.append('appointmentDate', format(appointmentDate, 'yyyy-MM-dd'));
     }
@@ -196,7 +197,6 @@ export default function CaseDetailForm({
     if (fingerprintTaker)
       formData.append('fingerprintTaker', fingerprintTaker.id);
     if (mainCounselor) formData.append('mainCounselor', mainCounselor.id);
-    formData.append('paymentMethod', paymentMethod);
     formData.append('notes', notes);
 
     // Process status flags
@@ -224,7 +224,7 @@ export default function CaseDetailForm({
     // Check if any field has changed
     const hasChanged =
       code ||
-      date ||
+      createdAt ||
       appointmentDate ||
       eventProvince.slug ||
       eventDistrict.slug ||
@@ -234,7 +234,6 @@ export default function CaseDetailForm({
       consultant ||
       fingerprintTaker ||
       mainCounselor ||
-      paymentMethod ||
       notes ||
       isScanned ||
       isFullInfo ||
@@ -249,7 +248,7 @@ export default function CaseDetailForm({
     setIsChanged(!!hasChanged);
   }, [
     code,
-    date,
+    createdAt,
     appointmentDate,
     eventProvince.slug,
     eventDistrict.slug,
@@ -259,7 +258,6 @@ export default function CaseDetailForm({
     consultant,
     fingerprintTaker,
     mainCounselor,
-    paymentMethod,
     notes,
     isScanned,
     isFullInfo,
@@ -307,8 +305,8 @@ export default function CaseDetailForm({
             setNotes(caseData.case_notes || '');
 
             // Set dates
-            if (caseData.case_date) {
-              setDate(new Date(caseData.case_date));
+            if (caseData.case_createdAt) {
+              setCreatedAt(new Date(caseData.case_createdAt));
             }
             if (caseData.case_appointmentDate) {
               setAppointmentDate(new Date(caseData.case_appointmentDate));
@@ -321,7 +319,6 @@ export default function CaseDetailForm({
                 provinces[0];
               setEventProvince(eventProv);
               const eventDists = getDistrictsByProvinceCode(eventProv.code);
-              setEventDistricts(eventDists);
               const eventDist =
                 getDistrictBySlug(
                   eventDists,
@@ -334,7 +331,6 @@ export default function CaseDetailForm({
             // Set other fields
             setPartner(caseData.case_partner || '');
             setCloseAt(caseData.case_closeAt || '');
-            setPaymentMethod(caseData.case_paymentMethod || '');
 
             // Set employees
             if (caseData.case_consultant) {
@@ -457,8 +453,8 @@ export default function CaseDetailForm({
               <DatePicker
                 id='case_date'
                 name='date'
-                initialDate={date}
-                onChange={(date) => setDate(date)}
+                initialDate={createdAt}
+                onChange={(date) => setCreatedAt(date)}
               />
             </div>
 
@@ -698,34 +694,6 @@ export default function CaseDetailForm({
                 </div>
               )}
             </Defer>
-          </div>
-
-          {/* Payment Method */}
-          <div>
-            <Label
-              htmlFor='paymentMethod'
-              className='text-gray-700 font-semibold mb-2 block text-sm sm:text-base'
-            >
-              Phương thức thanh toán
-            </Label>
-            <Select
-              value={paymentMethod}
-              name='paymentMethod'
-              onValueChange={(value) => setPaymentMethod(value)}
-            >
-              <SelectTrigger className='text-sm sm:text-base'>
-                <SelectValue placeholder='Chọn phương thức thanh toán' />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(CASE_SERVICE.PAYMENT_METHOD).map(
-                  ([key, value]) => (
-                    <SelectItem key={key} value={value.value}>
-                      {value.label}
-                    </SelectItem>
-                  ),
-                )}
-              </SelectContent>
-            </Select>
           </div>
 
           {/* Process Status */}

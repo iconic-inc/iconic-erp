@@ -26,8 +26,8 @@ const provinces = getProvinces() as Array<IProvince>;
 const toAddressString = (address: {
   street: string;
   ward?: string;
-  province: string;
-  district: string;
+  province?: string;
+  district?: string;
 }) => {
   // For old address format
   if (typeof address === 'string') {

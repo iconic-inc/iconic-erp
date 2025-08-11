@@ -28,7 +28,6 @@ export interface ICaseServicePopulate {
   case_customer: ICustomerPopulate;
   case_date: Date;
   case_appointmentDate?: Date;
-  case_paymentMethod?: Values<typeof CASE_SERVICE.PAYMENT_METHOD>['value'];
   case_processStatus: IProcessStatus;
   case_createdAt: Date;
 }
@@ -40,7 +39,6 @@ export interface ICaseService extends ICaseServicePopulate {
   case_consultant?: IEmployeePopulate;
   case_fingerprintTaker?: IEmployeePopulate;
   case_mainCounselor?: IEmployeePopulate;
-  case_processStatus: IProcessStatus;
   case_notes?: string;
 
   createdAt: Date;
@@ -66,10 +64,6 @@ export interface ICaseServiceCreate {
   consultant?: string;
   fingerprintTaker?: string;
   mainCounselor?: string;
-  scanProvince?: string;
-  scanDistrict?: string;
-  scanStreet?: string;
-  paymentMethod?: Values<typeof CASE_SERVICE.PAYMENT_METHOD>['value'];
   notes?: string;
   createdAt?: string;
 

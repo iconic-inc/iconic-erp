@@ -8,24 +8,6 @@ export const CASE_SERVICE = {
     COMPLETED: 'completed',
     CLOSED: 'closed',
   },
-  PAYMENT_METHOD: {
-    CASH: {
-      label: 'Tiền mặt',
-      value: 'cash',
-    },
-    TRANSFER: {
-      label: 'Chuyển khoản',
-      value: 'transfer',
-    },
-    CARD: {
-      label: 'Thẻ',
-      value: 'card',
-    },
-    OTHER: {
-      label: 'Khác',
-      value: 'other',
-    },
-  },
   CLOSE_AT: {
     EVENT: {
       label: 'Tại sự kiện',

@@ -18,7 +18,7 @@ export default function AttendanceLog({
 }) {
   return (
     <Card className='rounded-xl overflow-hidden shadow-lg border border-gray-200'>
-      <CardHeader className='bg-gradient-to-r from-red-500 to-red-500/80 text-white p-3 sm:p-4'>
+      <CardHeader className='bg-gradient-to-r from-red-900 from-red-800 text-white p-3 sm:p-4'>
         <CardTitle className='text-white text-lg sm:text-xl font-bold flex items-center'>
           <Clock className='w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0' />
           <span className='hidden sm:inline'>

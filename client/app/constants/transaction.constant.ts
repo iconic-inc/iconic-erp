@@ -23,20 +23,6 @@ export const TRANSACTION = {
   },
   CATEGORY: {
     income: {
-      CONSULTATION_FEE: { value: 'consultation_fee', label: 'Phí tư vấn' },
-      CASE_HANDLING_FEE: {
-        value: 'case_handling_fee',
-        label: 'Phí xử lý hồ sơ',
-      },
-      RETAINER_FEE: { value: 'retainer_fee', label: 'Phí giữ chân luật sư' },
-      SUCCESS_BONUS: {
-        value: 'success_bonus',
-        label: 'Phí thành công vụ việc',
-      },
-      DOCUMENT_DRAFTING: {
-        value: 'document_drafting',
-        label: 'Phí soạn thảo văn bản',
-      },
       OTHER: { value: 'other_income', label: 'Khác' },
     },
 

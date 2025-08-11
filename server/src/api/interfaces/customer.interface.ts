@@ -16,6 +16,7 @@ export interface ICustomerPopulate {
   cus_createdAt: Date;
   cus_parentName?: string;
   cus_parentDateOfBirth?: string;
+  cus_contactChannel?: string;
 }
 
 export interface ICustomer extends ICustomerPopulate {
@@ -23,7 +24,6 @@ export interface ICustomer extends ICustomerPopulate {
   cus_address?: IAddress;
   cus_birthDate?: string;
   cus_sex?: Values<typeof CUSTOMER.SEX>['value'];
-  cus_contactChannel?: string;
   cus_source?: string;
   cus_notes?: string;
   cus_accountName?: string;

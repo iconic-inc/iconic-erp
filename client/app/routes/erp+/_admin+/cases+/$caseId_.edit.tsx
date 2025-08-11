@@ -115,7 +115,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         const formData = await request.formData();
         const data: ICaseServiceUpdate = {
           code: formData.get('code') as string,
-          date: formData.get('date') as string,
           appointmentDate:
             (formData.get('appointmentDate') as string) || undefined,
           eventProvince: (formData.get('eventProvince') as string) || undefined,
@@ -127,10 +126,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           fingerprintTaker:
             (formData.get('fingerprintTaker') as string) || undefined,
           mainCounselor: (formData.get('mainCounselor') as string) || undefined,
-          paymentMethod:
-            (formData.get('paymentMethod') as Values<
-              typeof CASE_SERVICE.PAYMENT_METHOD
-            >['value']) || undefined,
           notes: (formData.get('notes') as string) || undefined,
 
           // Process status flags
@@ -147,7 +142,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
         // Kiểm tra dữ liệu bắt buộc
         if (
-          ['date', 'eventStreet', 'code'].some(
+          ['eventStreet', 'code'].some(
             (field) => !data[field as keyof ICaseServiceUpdate],
           )
         ) {
