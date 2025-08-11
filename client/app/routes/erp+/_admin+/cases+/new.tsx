@@ -98,7 +98,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const data: ICaseServiceCreate = {
           code: formData.get('code') as string,
           customer: customerId,
-          date: formData.get('date') as string,
           appointmentDate:
             (formData.get('appointmentDate') as string) || undefined,
           eventProvince: (formData.get('eventProvince') as string) || undefined,
@@ -110,10 +109,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           fingerprintTaker:
             (formData.get('fingerprintTaker') as string) || undefined,
           mainCounselor: (formData.get('mainCounselor') as string) || undefined,
-          paymentMethod:
-            (formData.get('paymentMethod') as Values<
-              typeof CASE_SERVICE.PAYMENT_METHOD
-            >['value']) || undefined,
           notes: (formData.get('notes') as string) || undefined,
           createdAt: (formData.get('createdAt') as string) || undefined,
 
@@ -131,7 +126,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
         // Kiểm tra dữ liệu bắt buộc
         if (
-          ['customer', 'date', 'eventStreet', 'code'].some(
+          ['customer', 'eventStreet', 'code'].some(
             (field) => !data[field as keyof ICaseServiceCreate],
           )
         ) {

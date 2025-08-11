@@ -207,7 +207,7 @@ export default function CRMCaseService() {
       dateFilterable: true,
       render: (item) => (
         <span className='text-gray-600 text-sm sm:text-base truncate block max-w-[100px] sm:max-w-none'>
-          {formatDate(item.case_date)}
+          {formatDate(item.case_createdAt)}
         </span>
       ),
     },
@@ -222,26 +222,6 @@ export default function CRMCaseService() {
         <span className='text-gray-600 text-sm sm:text-base truncate block max-w-[100px] sm:max-w-none'>
           {item.case_appointmentDate
             ? formatDate(item.case_appointmentDate)
-            : '-'}
-        </span>
-      ),
-    },
-    {
-      title: 'Phương thức thanh toán',
-      key: 'paymentMethod',
-      visible: true,
-      sortField: 'case_paymentMethod',
-      filterField: 'paymentMethod',
-      options: Object.values(CASE_SERVICE.PAYMENT_METHOD).map((method) => ({
-        value: method.value,
-        label: method.label,
-      })),
-      render: (item) => (
-        <span className='text-gray-600 text-xs sm:text-sm truncate block max-w-[100px] sm:max-w-none'>
-          {item.case_paymentMethod
-            ? Object.values(CASE_SERVICE.PAYMENT_METHOD).find(
-                (method) => method.value === item.case_paymentMethod,
-              )?.label || item.case_paymentMethod
             : '-'}
         </span>
       ),

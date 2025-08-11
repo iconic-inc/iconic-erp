@@ -35,7 +35,6 @@ interface ICaseServiceQuery {
   search?: string;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  paymentMethod?: string;
   customerId?: string;
   consultantId?: string;
   fingerprintTakerId?: string;
@@ -77,7 +76,6 @@ const getCaseServices = async (
       search,
       sortBy,
       sortOrder,
-      paymentMethod,
       customerId,
       consultantId,
       fingerprintTakerId,
@@ -117,11 +115,6 @@ const getCaseServices = async (
 
     // Stage 1: Match by filters (early filtering)
     const matchConditions: any = {};
-
-    // Add payment method filter if provided
-    if (paymentMethod) {
-      matchConditions.case_paymentMethod = paymentMethod;
-    }
 
     // Add date range filters if provided
     if (dateFrom || dateTo) {
@@ -383,7 +376,6 @@ const getCaseServices = async (
           emp_department: 1,
         },
         case_scanLocation: 1,
-        case_paymentMethod: 1,
         case_processStatus: 1,
         case_notes: 1,
         case_createdAt: 1,
@@ -509,12 +501,6 @@ const createCaseService = async (caseServiceData: ICaseServiceCreate) => {
       consultant: caseServiceData.consultant,
       fingerprintTaker: caseServiceData.fingerprintTaker,
       mainCounselor: caseServiceData.mainCounselor,
-      scanLocation: {
-        province: caseServiceData.scanProvince || '',
-        district: caseServiceData.scanDistrict || '',
-        street: caseServiceData.scanStreet || '',
-      },
-      paymentMethod: caseServiceData.paymentMethod,
       processStatus: {
         isScanned: caseServiceData.isScanned || false,
         isFullInfo: caseServiceData.isFullInfo || false,
@@ -580,16 +566,7 @@ const updateCaseService = async (id: string, data: ICaseServiceUpdate) => {
               street: cleanedData.eventStreet,
             }
           : undefined,
-      scanLocation:
-        cleanedData.scanProvince ||
-        cleanedData.scanDistrict ||
-        cleanedData.scanStreet
-          ? {
-              province: cleanedData.scanProvince,
-              district: cleanedData.scanDistrict,
-              street: cleanedData.scanStreet,
-            }
-          : undefined,
+
       processStatus: {
         ...(cleanedData.isScanned !== undefined && {
           isScanned: cleanedData.isScanned,
@@ -626,9 +603,7 @@ const updateCaseService = async (id: string, data: ICaseServiceUpdate) => {
       eventProvince,
       eventDistrict,
       eventStreet,
-      scanProvince,
-      scanDistrict,
-      scanStreet,
+
       isScanned,
       isFullInfo,
       isAnalysisSent,
@@ -765,69 +740,67 @@ const exportCaseServicesToXLSX = async (queryParams: any) => {
     // Map case service data for Excel
     const excelData = caseServicesList.map((caseService) => {
       return {
-        ID: caseService.id || '',
-        'Khách hàng': `${caseService.case_customer?.cus_lastName || ''} ${
+        'MÃ DỊCH VỤ': caseService.case_code || '',
+        'KHÁCH HÀNG': `${caseService.case_customer?.cus_lastName || ''} ${
           caseService.case_customer?.cus_firstName || ''
         }`.trim(),
-        'Mã khách hàng': caseService.case_customer?.cus_code || '',
-        'Ngày sự kiện': caseService.case_date
+        'MÃ KHÁCH HÀNG': caseService.case_customer?.cus_code || '',
+        NGÀY: caseService.case_date
           ? format(new Date(caseService.case_date), 'dd/MM/yyyy')
           : '',
-        'Ngày hẹn': caseService.case_appointmentDate
+        'NGÀY HẸN': caseService.case_appointmentDate
           ? format(new Date(caseService.case_appointmentDate), 'dd/MM/yyyy')
           : '',
-        'Địa điểm sự kiện': caseService.case_eventLocation?.street || '',
-        'Tỉnh/Thành phố sự kiện':
-          caseService.case_eventLocation?.province || '',
-        'Quận/Huyện sự kiện': caseService.case_eventLocation?.district || '',
-        'Đối tác': caseService.case_partner || '',
-        'Scan chốt tại': caseService.case_closeAt || '',
-        'Tư vấn viên': caseService.case_consultant
+        'ĐỊA ĐIỂM SỰ KIỆN': caseService.case_eventLocation?.street || '',
+        'ĐỐI TÁC': caseService.case_partner || '',
+        'SCAN CHỐT TẠI': caseService.case_closeAt || '',
+        'TƯ VẤN VIÊN': caseService.case_consultant
           ? `${caseService.case_consultant.emp_user?.usr_firstName || ''} ${
               caseService.case_consultant.emp_user?.usr_lastName || ''
             }`.trim()
           : '',
-        'Người lấy vân tay': caseService.case_fingerprintTaker
+        'NGƯỜI LẤY VÂN TAY': caseService.case_fingerprintTaker
           ? `${
               caseService.case_fingerprintTaker.emp_user?.usr_firstName || ''
             } ${
               caseService.case_fingerprintTaker.emp_user?.usr_lastName || ''
             }`.trim()
           : '',
-        'Tư vấn viên chính': caseService.case_mainCounselor
+        'TƯ VẤN VIÊN CHÍNH': caseService.case_mainCounselor
           ? `${caseService.case_mainCounselor.emp_user?.usr_firstName || ''} ${
               caseService.case_mainCounselor.emp_user?.usr_lastName || ''
             }`.trim()
           : '',
-        'Phương thức thanh toán': caseService.case_paymentMethod || '',
-        'Đã scan': caseService.case_processStatus?.isScanned ? 'Có' : 'Không',
-        'Thông tin đầy đủ': caseService.case_processStatus?.isFullInfo
+        'ĐÃ LẤY DẤU': caseService.case_processStatus?.isScanned
           ? 'Có'
           : 'Không',
-        'Đã gửi phân tích': caseService.case_processStatus?.isAnalysisSent
+        'ĐỦ THÔNG TIN': caseService.case_processStatus?.isFullInfo
           ? 'Có'
           : 'Không',
-        'Đã xuất PDF': caseService.case_processStatus?.isPdfExported
+        'GỬI PHÂN TÍCH XONG': caseService.case_processStatus?.isAnalysisSent
           ? 'Có'
           : 'Không',
-        'Đã thanh toán đầy đủ': caseService.case_processStatus?.isFullyPaid
+        'XUẤT BÀI PDF': caseService.case_processStatus?.isPdfExported
           ? 'Có'
           : 'Không',
-        'Đã gửi file mềm': caseService.case_processStatus?.isSoftFileSent
+        'THANH TOÁN ĐỦ': caseService.case_processStatus?.isFullyPaid
           ? 'Có'
           : 'Không',
-        'Đã in': caseService.case_processStatus?.isPrinted ? 'Có' : 'Không',
-        'Đã gửi bản cứng': caseService.case_processStatus?.isPhysicalCopySent
+        'GỬI FILE MỀM QUA EMAIL': caseService.case_processStatus?.isSoftFileSent
           ? 'Có'
           : 'Không',
-        'Đã tư vấn sâu': caseService.case_processStatus?.isDeepConsulted
+        'IN ẤN XONG + GỬI VỀ VP': caseService.case_processStatus?.isPrinted
           ? 'Có'
           : 'Không',
-        'Ghi chú': caseService.case_notes || '',
-        'Tạo lúc': caseService.case_createdAt
-          ? format(new Date(caseService.case_createdAt), 'HH:mm dd/MM/yyyy')
-          : '',
-        'Cập nhật lúc': caseService.updatedAt
+        'ĐÃ GỬI BẢN CỨNG': caseService.case_processStatus?.isPhysicalCopySent
+          ? 'Có'
+          : 'Không',
+        ' ĐÃTHAM VẤN CH SÂU HOẶC HƯỚNG DẪN': caseService.case_processStatus
+          ?.isDeepConsulted
+          ? 'Có'
+          : 'Không',
+        'GHI CHÚ': caseService.case_notes || '',
+        'CẬP NHẬT LÚC': caseService.updatedAt
           ? format(new Date(caseService.updatedAt), 'HH:mm dd/MM/yyyy')
           : '',
       };

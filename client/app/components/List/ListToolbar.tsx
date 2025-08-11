@@ -355,7 +355,7 @@ export default function ListToolbar<T>({
         {/* Actions */}
         <div className='flex-1 flex items-center justify-end gap-2 sm:gap-3 flex-wrap'>
           {/* Import Button */}
-          {importable && (
+          {/* {importable && (
             <div className='flex-shrink-0'>
               <input
                 ref={fileInputRef}
@@ -385,10 +385,10 @@ export default function ListToolbar<T>({
                 )}
               </button>
             </div>
-          )}
+          )} */}
 
           {/* Export Button */}
-          {exportable && (
+          {/* {exportable && (
             <exportFetcher.Form
               method='POST'
               className='flex-shrink-0'
@@ -421,7 +421,7 @@ export default function ListToolbar<T>({
                 )}
               </button>
             </exportFetcher.Form>
-          )}
+          )} */}
 
           {/* Column Visibility Toggle */}
           <details className='relative flex-shrink-0'>

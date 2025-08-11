@@ -29,6 +29,7 @@ import { Button } from '~/components/ui/button';
 import { Progress } from '~/components/ui/progress';
 import { ProgressWithPercentage } from '~/components/ui/ProgressWithPercentage';
 import { calculateProgress } from '~/utils';
+import { toAddressString } from '~/utils/address.util';
 
 export default function CaseDetail({
   casePromise,
@@ -113,9 +114,9 @@ export default function CaseDetail({
                           Ngày bắt đầu:
                         </span>
                         <span className='text-sm sm:text-base font-medium break-words'>
-                          {caseService.case_date
+                          {caseService.case_createdAt
                             ? format(
-                                new Date(caseService.case_date),
+                                new Date(caseService.case_createdAt),
                                 'dd/MM/yyyy',
                                 { locale: vi },
                               )
@@ -150,11 +151,7 @@ export default function CaseDetail({
                             Địa điểm sự kiện:
                           </span>
                           <span className='text-sm sm:text-base font-medium break-words'>
-                            {caseService.case_eventLocation.street}
-                            {caseService.case_eventLocation.district &&
-                              `, ${caseService.case_eventLocation.district}`}
-                            {caseService.case_eventLocation.province &&
-                              `, ${caseService.case_eventLocation.province}`}
+                            {toAddressString(caseService.case_eventLocation)}
                           </span>
                         </div>
                       </div>
@@ -170,23 +167,6 @@ export default function CaseDetail({
                           <span className='text-sm sm:text-base font-medium break-words'>
                             {caseService.case_partner}
                           </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {caseService.case_paymentMethod && (
-                      <div className='flex items-start space-x-2 sm:space-x-3'>
-                        <AlertCircle className='w-4 h-4 text-gray-400 mt-0.5' />
-                        <div className='min-w-0 flex-1'>
-                          <span className='text-xs sm:text-sm text-gray-500 block'>
-                            Phương thức thanh toán:
-                          </span>
-                          <Badge className='text-xs sm:text-sm mt-1 bg-blue-100 text-blue-800'>
-                            {Object.values(CASE_SERVICE.PAYMENT_METHOD).find(
-                              (method) =>
-                                method.value === caseService.case_paymentMethod,
-                            )?.label || caseService.case_paymentMethod}
-                          </Badge>
                         </div>
                       </div>
                     )}

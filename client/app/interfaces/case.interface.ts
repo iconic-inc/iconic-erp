@@ -26,9 +26,7 @@ export interface ICaseServiceBrief {
   id: string;
   case_code: string;
   case_customer: ICustomerBrief;
-  case_date: Date;
   case_appointmentDate?: Date;
-  case_paymentMethod?: Values<typeof CASE_SERVICE.PAYMENT_METHOD>['value'];
   case_processStatus: IProcessStatus;
   case_createdAt: Date;
 }
@@ -40,7 +38,6 @@ export interface ICaseService extends ICaseServiceBrief {
   case_consultant?: IEmployeeBrief;
   case_fingerprintTaker?: IEmployeeBrief;
   case_mainCounselor?: IEmployeeBrief;
-  case_processStatus: IProcessStatus;
   case_notes?: string;
 
   createdAt: Date;
@@ -50,7 +47,6 @@ export interface ICaseService extends ICaseServiceBrief {
 export interface ICaseServiceCreate {
   code: string;
   customer: string;
-  date: string;
   appointmentDate?: string;
   eventProvince?: string;
   eventDistrict?: string;
@@ -60,7 +56,6 @@ export interface ICaseServiceCreate {
   consultant?: string;
   fingerprintTaker?: string;
   mainCounselor?: string;
-  paymentMethod?: Values<typeof CASE_SERVICE.PAYMENT_METHOD>['value'];
   notes?: string;
   createdAt?: string;
 

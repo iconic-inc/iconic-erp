@@ -44,14 +44,6 @@ const caseServiceBaseSchema = {
       message: 'ID tư vấn viên chính không hợp lệ',
     })
     .optional(),
-  paymentMethod: z
-    .enum(
-      Object.values(CASE_SERVICE.PAYMENT_METHOD).map((item) => item.value) as [
-        string,
-        ...string[]
-      ]
-    )
-    .optional(),
   notes: z.string().trim().optional(),
 
   // Process status fields
@@ -113,13 +105,6 @@ export const caseServiceQuerySchema = z
     search: z.string().optional(),
     sortBy: z.string().optional(),
     sortOrder: z.enum(['asc', 'desc']).optional(),
-    paymentMethod: z
-      .enum(
-        Object.values(CASE_SERVICE.PAYMENT_METHOD).map(
-          (item) => item.value
-        ) as [string, ...string[]]
-      )
-      .optional(),
     customerId: z
       .string()
       .refine((val) => !val || isValidObjectId(val), {

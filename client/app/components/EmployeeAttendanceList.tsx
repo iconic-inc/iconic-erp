@@ -169,7 +169,7 @@ export default function EmployeeAttendanceList({
 
   return (
     <Card className='rounded-xl overflow-hidden shadow-lg border border-gray-200'>
-      <CardHeader className='bg-gradient-to-r from-red-500 to-red-500/80 text-white py-3 md:py-4'>
+      <CardHeader className='bg-gradient-to-r from-red-900 from-red-800 text-white py-3 md:py-4'>
         <CardTitle className='text-white text-lg md:text-xl font-bold flex items-center'>
           <Clock className='w-4 h-4 md:w-5 md:h-5 mr-2' />
           <span className='hidden sm:inline'>Chấm công hôm nay</span>

@@ -79,8 +79,10 @@ export default function CustomerDetailForm({
   useEffect(() => {
     const newDistricts = getDistrictsByProvinceCode(province.code);
     setDistricts(newDistricts);
-    setDistrict(newDistricts[0] || districts[0]);
-  }, [province]);
+    if (district.provinceCode !== province.code) {
+      setDistrict(newDistricts[0] || districts[0]);
+    }
+  }, [province.code]);
 
   // Generate customer code
   const generateCustomerCode = () => {

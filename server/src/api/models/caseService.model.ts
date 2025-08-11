@@ -52,12 +52,6 @@ const caseServiceSchema = new Schema<ICaseServiceDocument, ICaseServiceModel>(
       type: Schema.Types.ObjectId,
       ref: USER.EMPLOYEE.DOCUMENT_NAME,
     },
-    case_paymentMethod: {
-      type: String,
-      enum: Object.values(CASE_SERVICE.PAYMENT_METHOD).flatMap(
-        (item) => item.value
-      ),
-    },
     case_processStatus: {
       isScanned: { type: Boolean, default: false },
       isFullInfo: { type: Boolean, default: false },
