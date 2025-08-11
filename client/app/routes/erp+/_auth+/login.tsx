@@ -289,6 +289,7 @@ const Login = () => {
                 Không có tài khoản?{' '}
                 <Link
                   to='#'
+                  prefetch='intent'
                   className='text-blue-600 font-medium hover:text-blue-700 hover:underline transition-colors'
                 >
                   Liên hệ admin

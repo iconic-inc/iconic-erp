@@ -159,6 +159,7 @@ export default function EmployeeList({
 
                         <Link
                           to={`/erp/employees/${employee.id}`}
+                          prefetch='intent'
                           className='flex items-center flex-grow text-gray-900 hover:text-red-500'
                         >
                           <div className='flex-shrink-0 h-10 w-10'>
@@ -214,6 +215,7 @@ export default function EmployeeList({
                       <div className='flex justify-end space-x-2'>
                         <Link
                           to={`/erp/employees/${employee.id}`}
+                          prefetch='intent'
                           className='text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50 transition-all'
                         >
                           <span className='material-symbols-outlined text-sm'>
@@ -223,6 +225,7 @@ export default function EmployeeList({
 
                         <Link
                           to={`/erp/employees/${employee.id}/edit`}
+                          prefetch='intent'
                           className='text-gray-600 hover:text-gray-900 p-1 rounded-full hover:bg-gray-50 transition-all'
                         >
                           <span className='material-symbols-outlined text-sm'>

@@ -55,6 +55,7 @@ export default function CaseDocumentList({
       render: (caseDoc) => (
         <Link
           to={`/erp/documents/${caseDoc.document.id}`}
+          prefetch='intent'
           className='text-sm font-medium text-blue-600 hover:underline'
         >
           {caseDoc.document.doc_name}

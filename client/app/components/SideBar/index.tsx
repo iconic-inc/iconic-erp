@@ -28,7 +28,7 @@ export default function ERPSidebar() {
   return (
     <Sidebar className='lg:h-screen'>
       <SidebarHeader>
-        <Link to='/erp' className='flex items-center mb-6'>
+        <Link to='/erp' prefetch='intent' className='flex items-center mb-6'>
           <div className='w-12 h-12 rounded-full overflow-hidden'>
             <img src='/assets/iconic-logo.png' alt='Iconic Logo' />
           </div>

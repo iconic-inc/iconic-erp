@@ -149,6 +149,7 @@ export default function CRMCaseService() {
       render: (item) => (
         <Link
           to={`/erp/cases/${item.id}`}
+          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full'
         >
           <span className='text-sm sm:text-base truncate block max-w-[150px] sm:max-w-none'>
@@ -167,6 +168,7 @@ export default function CRMCaseService() {
       render: (item) => (
         <Link
           to={`/erp/customers/${item.case_customer.id}`}
+          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full'
         >
           <span className='text-sm sm:text-base truncate block max-w-[150px] sm:max-w-none'>
