@@ -1,6 +1,6 @@
 import { useRouteLoaderData } from '@remix-run/react';
 import { IResolveError } from '~/interfaces/app.interface';
-import { loader } from '~/routes/erp+/_admin+/_layout';
+import { loader } from '~/routes/khach-dang-ky+/_main+/_layout';
 
 const MINUTES_AGO = 'phút trước';
 const HOURS_AGO = 'giờ trước';
@@ -95,6 +95,16 @@ const useERPLoaderData = () => {
   );
 };
 
+const useCustomerLoaderData = () => {
+  return (
+    useRouteLoaderData<typeof loader>(
+      'routes/khach-dang-ky+/_main+/_layout',
+    ) || {
+      customer: null,
+    }
+  );
+};
+
 export {
   getPublicPeriod,
   getNumerator,
@@ -103,4 +113,5 @@ export {
   clientFetch,
   isResolveError,
   useERPLoaderData,
+  useCustomerLoaderData,
 };

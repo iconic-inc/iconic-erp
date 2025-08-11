@@ -77,6 +77,9 @@ export class AuthService {
   }
 
   static async signUp({ email }: IUserCreate) {
+    if (!email) {
+      throw new BadRequestError('Email is required');
+    }
     const foundUser = await UserModel.findOne({ usr_email: email });
     if (foundUser) {
       throw new Error('Email already exists');

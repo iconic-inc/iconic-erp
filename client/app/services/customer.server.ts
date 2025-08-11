@@ -7,6 +7,7 @@ import {
   IUpdateCustomerData,
 } from '~/interfaces/customer.interface';
 import { IListResponse } from '~/interfaces/response.interface';
+import { ICaseService } from '~/interfaces/case.interface';
 
 // Lấy danh sách khách hàng với phân trang và query
 const getCustomers = async (
@@ -167,6 +168,21 @@ const importCustomers = async (
   return response;
 };
 
+const createCustomerAccount = async (
+  customerId: string,
+  request: ISessionUser,
+) => {
+  const response = await fetcher<any>(`/customers/${customerId}/account`, {
+    method: 'POST',
+    request,
+  });
+  return response;
+};
+
+const getCurrentCustomer = async (request: ISessionUser) => {
+  return await fetcher('/customers/me', { request });
+};
+
 export {
   getCustomers,
   getCustomerById,
@@ -176,5 +192,7 @@ export {
   getCustomerStatistics,
   deleteMultipleCustomers,
   exportCustomers,
+  createCustomerAccount,
   importCustomers,
+  getCurrentCustomer,
 };

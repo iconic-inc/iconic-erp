@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 import * as fs from 'fs';
 import * as path from 'path';
 import { serverConfig } from '@configs/config.server';
+import slugify from 'slugify';
 
 interface IEmployeeQuery {
   page?: number;
@@ -78,7 +79,9 @@ const createEmployee = async (data: IEmployeeCreate) => {
       usr_birthdate: data.birthdate,
       usr_sex: data.sex,
       usr_username: data.username || data.email,
-      usr_slug: data.email.split('@')[0],
+      usr_slug:
+        data.email?.split('@')[0] ||
+        slugify(data.firstName + ' ' + data.lastName),
       usr_role: data.role,
       usr_password: hashPassword,
       usr_salt: salt,

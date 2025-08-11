@@ -5,7 +5,7 @@ import { IRole } from './role.interface';
 export interface IUserBrief {
   id: string;
   usr_username: string;
-  usr_email: string;
+  usr_email?: string;
   usr_firstName: string;
   usr_lastName: string;
   usr_slug: string;
@@ -25,7 +25,7 @@ export interface IUser extends IUserBrief {
 
 export interface IUserCreate {
   username: string;
-  email: string;
+  email?: string;
   firstName: string;
   address: string;
   msisdn: string;

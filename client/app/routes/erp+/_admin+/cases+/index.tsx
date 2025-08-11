@@ -177,19 +177,6 @@ export default function CRMCaseService() {
       ),
     },
     {
-      title: 'Thông tin phụ huynh',
-      key: 'parentData',
-      visible: true,
-      render: (item) => (
-        <div className='flex flex-col gap-1 text-sm sm:text-base'>
-          <span>{item.case_customer.cus_parentName || 'N/A'}</span>
-          <span className='text-gray-500 text-xs sm:text-sm'>
-            {formatDate(item.case_customer.cus_parentDateOfBirth) || 'N/A'}
-          </span>
-        </div>
-      ),
-    },
-    {
       title: 'Số điện thoại',
       key: 'msisdn',
       visible: true,

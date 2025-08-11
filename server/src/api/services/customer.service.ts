@@ -11,7 +11,7 @@ import {
   getReturnList,
   removeNestedNullish,
 } from '@utils/index';
-import { CUSTOMER } from '../constants';
+import { CUSTOMER, USER } from '../constants';
 import { formatAttributeName } from '../utils';
 import { FilterQuery } from 'mongoose';
 import mongoose from 'mongoose';
@@ -21,6 +21,11 @@ import * as XLSX from 'xlsx';
 import { serverConfig } from '@configs/config.server';
 import { toAddressString } from '@utils/address.util';
 import { format, parse } from 'date-fns';
+import { createUser } from '@models/repositories/user.repo';
+import slugify from 'slugify';
+import { getRoleById } from './role.service';
+import bcrypt from 'bcrypt';
+import { getUserById, getUsers } from './user.service';
 
 interface ICustomerQuery {
   page?: number;
@@ -89,11 +94,11 @@ const createCustomer = async (customerData: ICustomerCreate) => {
       notes: customerData.notes,
       code: customerData.code,
       birthDate: customerData.birthDate,
-      parentName: customerData.parentName,
-      parentDateOfBirth: customerData.parentDateOfBirth,
       accountName: customerData.accountName,
       createdAt: new Date(customerData.createdAt || Date.now()).toISOString(),
     });
+
+    await createCustomerAccount(newCustomer._id.toString());
 
     return getReturnData(newCustomer);
   } catch (error) {
@@ -199,6 +204,7 @@ const getCustomers = async (query: ICustomerQuery = {}) => {
     pipeline.push({
       $project: {
         _id: 1,
+        cus_user: 1,
         cus_firstName: 1,
         cus_lastName: 1,
         cus_email: 1,
@@ -210,8 +216,6 @@ const getCustomers = async (query: ICustomerQuery = {}) => {
         cus_notes: 1,
         cus_code: 1,
         cus_birthDate: 1,
-        cus_parentName: 1,
-        cus_parentDateOfBirth: 1,
         cus_accountName: 1,
         cus_createdAt: 1,
         createdAt: 1,
@@ -235,6 +239,30 @@ const getCustomers = async (query: ICustomerQuery = {}) => {
     // Stage 4: Apply pagination
     pipeline.push({ $skip: (page - 1) * limit });
     pipeline.push({ $limit: +limit });
+
+    // Stage 5: Look up user information
+    pipeline.push({
+      $lookup: {
+        from: USER.COLLECTION_NAME,
+        localField: 'cus_user',
+        foreignField: '_id',
+        as: 'cus_user',
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              usr_username: 1,
+            },
+          },
+        ],
+      },
+    });
+    pipeline.push({
+      $unwind: {
+        path: '$cus_user',
+        preserveNullAndEmptyArrays: true,
+      },
+    });
 
     // Execute the aggregation
     const customers = await CustomerModel.aggregate(pipeline);
@@ -266,7 +294,10 @@ const getCustomers = async (query: ICustomerQuery = {}) => {
 
 const getCustomerById = async (customerId: string) => {
   try {
-    const customer = await CustomerModel.findById(customerId);
+    const customer = await CustomerModel.findById(customerId).populate({
+      path: 'cus_user',
+      select: 'id usr_username',
+    });
 
     if (!customer) {
       throw new NotFoundError('Không tìm thấy khách hàng');
@@ -479,79 +510,6 @@ const deleteMultipleCustomers = async ({
   }
 };
 
-const searchCustomers = async (searchQuery: any) => {
-  try {
-    let query: FilterQuery<any> = {};
-
-    // Build search query based on provided fields
-    if (searchQuery.text) {
-      const searchText = searchQuery.text;
-      query.$or = [
-        { cus_firstName: { $regex: searchText, $options: 'i' } },
-        { cus_lastName: { $regex: searchText, $options: 'i' } },
-        { cus_email: { $regex: searchText, $options: 'i' } },
-        { cus_msisdn: { $regex: searchText, $options: 'i' } },
-        { cus_notes: { $regex: searchText, $options: 'i' } },
-        { 'cus_address.province': { $regex: searchText, $options: 'i' } },
-        { 'cus_address.district': { $regex: searchText, $options: 'i' } },
-        { 'cus_address.street': { $regex: searchText, $options: 'i' } },
-      ];
-    }
-
-    // Add filters for specific fields if provided
-    if (searchQuery.sex) {
-      query.cus_sex = searchQuery.sex;
-    }
-
-    if (searchQuery.source) {
-      query.cus_source = searchQuery.source;
-    }
-
-    if (searchQuery.contactChannel) {
-      query.cus_contactChannel = searchQuery.contactChannel;
-    }
-
-    // Filter by address components if provided
-    if (searchQuery.province) {
-      query['cus_address.province'] = searchQuery.province;
-    }
-
-    if (searchQuery.district) {
-      query['cus_address.district'] = searchQuery.district;
-    }
-
-    // Date range filters
-    if (searchQuery.startDate || searchQuery.endDate) {
-      query.createdAt = {};
-
-      if (searchQuery.startDate) {
-        query.createdAt.$gte = new Date(searchQuery.startDate);
-      }
-
-      if (searchQuery.endDate) {
-        query.createdAt.$lte = new Date(searchQuery.endDate);
-      }
-    }
-
-    // Get results
-    const customers = await CustomerModel.find(query).sort({ createdAt: -1 });
-
-    return getReturnList(customers);
-  } catch (error) {
-    // Wrap original error with Vietnamese message if it's a standard Error
-    if (
-      error instanceof Error &&
-      !(error instanceof BadRequestError) &&
-      !(error instanceof NotFoundError)
-    ) {
-      throw new Error(
-        `Đã xảy ra lỗi khi tìm kiếm khách hàng: ${error.message}`
-      );
-    }
-    throw error;
-  }
-};
-
 const getCustomerStatistics = async (query: any) => {
   try {
     // Get total count
@@ -694,8 +652,6 @@ const exportCustomersToXLSX = async (queryParams: any) => {
             (item) => item.value === customer.cus_source
           )?.label || '',
         'Ghi chú': customer.cus_notes || '',
-        'Tên phụ huynh': customer.cus_parentName || '',
-        'Ngày sinh phụ huynh': customer.cus_parentDateOfBirth || '',
         'Tên tài khoản': customer.cus_accountName || '',
         'Ngày sinh': customer.cus_birthDate
           ? format(new Date(customer.cus_birthDate), 'dd/MM/yyyy')
@@ -1049,8 +1005,6 @@ const mapExcelRowToCustomer = (row: any) => {
       Object.values(CUSTOMER.SOURCE).find((item) => item.label === sourceRow)
         ?.value || CUSTOMER.SOURCE.OTHER.value,
     notes: row['Ghi chú'] || '',
-    parentName: row['Tên phụ huynh'] || '',
-    parentDateOfBirth: row['Ngày sinh phụ huynh'] || '',
     accountName: row['Tên tài khoản'] || '',
     birthDate,
     createdAt,
@@ -1078,6 +1032,51 @@ const findExistingCustomer = async (customerData: any) => {
   return await CustomerModel.findOne({ $or: conditions });
 };
 
+const createCustomerAccount = async (customerId: string) => {
+  const customer = await getCustomerById(customerId);
+  const foundUser = (await getUsers({ cus_msisdn: customer.cus_msisdn }))[0];
+  if (foundUser) {
+    throw new BadRequestError('Số điện thoại đã được gán cho tài khoản khác!');
+  }
+
+  const customerRole = await getRoleById('customer');
+
+  const salt = bcrypt.genSaltSync(10);
+  const hashPassword = await bcrypt.hash(customer.cus_msisdn!.slice(-5), salt);
+
+  const customerUser = await createUser({
+    username: customer.cus_msisdn!,
+    firstName: customer.cus_firstName!,
+    lastName: customer.cus_lastName!,
+    email: customer.cus_email!,
+    salt,
+    password: hashPassword,
+    slug: slugify(customer.cus_firstName! + ' ' + customer.cus_lastName!),
+    role: customerRole.id!,
+    status: USER.STATUS.ACTIVE,
+  });
+  await updateCustomer(customerId, { user: customerUser.id });
+
+  return { success: true, message: 'Tạo tài khoản khách hàng thành công' };
+};
+
+const getCustomerByUserId = async (userId: string) => {
+  const foundCustomer = await CustomerModel.findOne({
+    cus_user: userId,
+  }).populate({
+    path: 'cus_user',
+    select: '-__v -usr_password -usr_salt',
+    populate: {
+      path: 'usr_role usr_avatar',
+      select: 'name slug img_url',
+    },
+  });
+  if (!foundCustomer) {
+    throw new NotFoundError('Khách hàng không tồn tại');
+  }
+  return getReturnData(foundCustomer);
+};
+
 export {
   createCustomer,
   getCustomers,
@@ -1085,8 +1084,9 @@ export {
   updateCustomer,
   deleteCustomer,
   deleteMultipleCustomers,
-  searchCustomers,
   getCustomerStatistics,
   exportCustomersToXLSX,
   importCustomersFromXLSX,
+  createCustomerAccount,
+  getCustomerByUserId,
 };

@@ -11,7 +11,7 @@ export interface IUserPopulate {
 export interface IUser {
   id: string;
   usr_username: string;
-  usr_email: string;
+  usr_email?: string;
   usr_firstName: string;
   usr_lastName: string;
   usr_slug: string;
@@ -34,7 +34,7 @@ export interface IUserDetail extends Omit<IUser, 'usr_role'> {
 
 export interface IUserCreate {
   username: string;
-  email: string;
+  email?: string;
   firstName: string;
   lastName: string;
   slug: string;
@@ -55,14 +55,14 @@ export interface IUserModel extends Model<IUser> {
 
 export interface IUserJWTPayload {
   userId: string;
-  email: string;
+  email?: string;
   browserId: string;
 }
 
 export interface IUserResponseData {
   id: string;
   username: string;
-  email: string;
+  email?: string;
   firstName: string;
   lastName: string;
   slug: string;

@@ -45,7 +45,7 @@ export default function ERPSidebar() {
           user={{
             avatar:
               user.usr_avatar?.img_url || '/assets/user-avatar-placeholder.jpg',
-            email: user.usr_email,
+            email: user?.usr_email || '',
             name: `${user.usr_firstName} ${user.usr_lastName}`,
           }}
         />
