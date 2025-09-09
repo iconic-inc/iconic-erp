@@ -529,6 +529,7 @@ export default function HRMProfile() {
             <div className='w-full flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0'>
               <Link
                 to='/erp'
+                prefetch='intent'
                 className='bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm flex items-center transition-all duration-300 w-full sm:w-auto justify-center sm:justify-start'
               >
                 <ArrowLeft className='h-4 w-4 mr-1' />

@@ -57,8 +57,6 @@ export default function CustomerDetailForm({
   const [source, setSource] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
-  const [parentName, setParentName] = useState<string>('');
-  const [parentDateOfBirth, setParentDateOfBirth] = useState<Date | null>(null);
   const [accountName, setAccountName] = useState<string>('');
 
   // address state
@@ -162,16 +160,6 @@ export default function CustomerDetailForm({
       formData.set('birthDate', '');
     }
 
-    // Manually append parentDateOfBirth if it exists
-    if (parentDateOfBirth) {
-      formData.set(
-        'parentDateOfBirth',
-        format(parentDateOfBirth, 'yyyy-MM-dd'),
-      );
-    } else {
-      formData.set('parentDateOfBirth', '');
-    }
-
     toastIdRef.current = toast.loading('Đang xử lý...');
 
     // Submit the form
@@ -199,8 +187,6 @@ export default function CustomerDetailForm({
       contactChannel ||
       source ||
       notes ||
-      parentName ||
-      parentDateOfBirth ||
       accountName;
 
     setIsChanged(!!hasChanged);
@@ -219,8 +205,6 @@ export default function CustomerDetailForm({
     contactChannel,
     source,
     notes,
-    parentName,
-    parentDateOfBirth,
     accountName,
   ]);
 
@@ -300,12 +284,6 @@ export default function CustomerDetailForm({
             setContactChannel(customerData.cus_contactChannel || '');
             setSource(customerData.cus_source || '');
             setNotes(customerData.cus_notes || '');
-            setParentName(customerData.cus_parentName || '');
-            setParentDateOfBirth(
-              customerData.cus_parentDateOfBirth
-                ? new Date(customerData.cus_parentDateOfBirth)
-                : null,
-            );
             setAccountName(customerData.cus_accountName || '');
           } else {
             console.error(
@@ -583,48 +561,6 @@ export default function CustomerDetailForm({
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
               <div>
                 <Label
-                  htmlFor='customer_parentName'
-                  className='text-gray-700 font-semibold mb-2 block'
-                >
-                  Tên phụ huynh
-                </Label>
-                <Input
-                  id='customer_parentName'
-                  name='parentName'
-                  value={parentName}
-                  onChange={(e) => setParentName(e.target.value)}
-                  placeholder='Nhập tên phụ huynh'
-                  className='bg-white border-gray-300 text-sm sm:text-base'
-                />
-                {errors.parentName && (
-                  <p className='text-red-500 text-xs sm:text-sm mt-1'>
-                    {errors.parentName}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Label
-                  htmlFor='customer_parentDateOfBirth'
-                  className='text-gray-700 font-semibold mb-2 block'
-                >
-                  Ngày sinh phụ huynh
-                </Label>
-                <DatePicker
-                  id='customer_parentDateOfBirth'
-                  name='parentDateOfBirth'
-                  initialDate={parentDateOfBirth}
-                  onChange={(date) => setParentDateOfBirth(date)}
-                />
-                {errors.parentDateOfBirth && (
-                  <p className='text-red-500 text-xs sm:text-sm mt-1'>
-                    {errors.parentDateOfBirth}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Label
                   htmlFor='customer_accountName'
                   className='text-gray-700 font-semibold mb-2 block'
                 >
@@ -762,6 +698,7 @@ export default function CustomerDetailForm({
           <div className='w-full flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0'>
             <Link
               to='/erp/customers'
+              prefetch='intent'
               className='bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm flex items-center transition-all duration-300 w-full sm:w-auto justify-center sm:justify-start'
             >
               <ArrowLeft className='h-4 w-4' />

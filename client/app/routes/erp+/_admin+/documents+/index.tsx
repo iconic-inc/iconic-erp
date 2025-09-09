@@ -107,6 +107,7 @@ export default function HRMDocuments() {
         <Link
           to={`/erp/documents/${item.id}`}
           className='text-blue-600 hover:underline text-xs sm:text-sm block truncate max-w-[200px] sm:max-w-none'
+          prefetch='intent'
           title={item.doc_name}
         >
           {item.doc_name}
@@ -147,6 +148,7 @@ export default function HRMDocuments() {
         return (
           <Link
             to={`/erp/employees/${item.doc_createdBy.id}`}
+            prefetch='intent'
             className='text-blue-600 hover:underline text-xs sm:text-sm block truncate max-w-[100px] sm:max-w-none'
             title={`${item.doc_createdBy.emp_user.usr_firstName} ${item.doc_createdBy.emp_user.usr_lastName}`}
           >

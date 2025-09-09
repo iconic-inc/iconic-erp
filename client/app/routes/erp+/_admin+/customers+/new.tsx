@@ -50,8 +50,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           contactChannel: formData.get('contactChannel') as string,
           source: formData.get('source') as string,
           createdAt: formData.get('createdAt') as string,
-          parentName: formData.get('parentName') as string,
-          parentDateOfBirth: formData.get('parentDateOfBirth') as string,
           accountName: formData.get('accountName') as string,
         };
 

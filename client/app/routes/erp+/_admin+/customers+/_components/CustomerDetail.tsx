@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link, useFetcher } from '@remix-run/react';
 import Defer from '~/components/Defer';
 import LoadingCard from '~/components/LoadingCard';
 import ErrorCard from '~/components/ErrorCard';
@@ -25,6 +25,9 @@ import {
 import { Button } from '~/components/ui/button';
 import { toAddressString } from '~/utils/address.util';
 import { CUSTOMER } from '~/constants/customer.constant';
+import { useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
+import { action } from '../$customerId';
 
 export default function CustomerDetail({
   customerPromise,
@@ -44,6 +47,27 @@ export default function CustomerDetail({
         ?.label || CUSTOMER.CONTACT_CHANNEL.OTHER.label
     );
   };
+
+  const fetcher = useFetcher<typeof action>();
+  const toastIdRef = useRef<any>(null);
+  const handleCreateCustomerAccount = () => {
+    toastIdRef.current = toast.loading('Đang tạo tài khoản...');
+    fetcher.submit(null, {
+      method: 'POST',
+      action: '.',
+    });
+  };
+
+  useEffect(() => {
+    if (fetcher.data) {
+      toast.update(toastIdRef.current, {
+        render: fetcher.data.message,
+        type: fetcher.data.type as 'success' | 'error',
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
+  }, [fetcher.data]);
 
   return (
     <Defer resolve={customerPromise} fallback={<LoadingCard />}>
@@ -212,6 +236,20 @@ export default function CustomerDetail({
                       </div>
                     </div>
 
+                    {customer.cus_accountName && (
+                      <div className='flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3'>
+                        <div className='flex items-center space-x-2 sm:space-x-3'>
+                          <IdCard className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
+                          <span className='text-sm md:text-base text-gray-500'>
+                            Tên tài khoản Zalo/FB:
+                          </span>
+                        </div>
+                        <span className='text-sm md:text-base font-medium pl-5 sm:pl-0'>
+                          {customer.cus_accountName}
+                        </span>
+                      </div>
+                    )}
+
                     <div className='flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3'>
                       <div className='flex items-center space-x-2 sm:space-x-3'>
                         <Users className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
@@ -266,65 +304,47 @@ export default function CustomerDetail({
               </div>
 
               {/* Parent and Account Information */}
-              {(customer.cus_parentName ||
-                customer.cus_parentDateOfBirth ||
-                customer.cus_accountName) && (
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 pt-4 border-t border-gray-200'>
-                  <div className='space-y-3 sm:space-y-4'>
-                    <h3 className='text-lg md:text-xl font-semibold text-gray-900 flex items-center'>
-                      <Users className='w-5 h-5 md:w-6 md:h-6 mr-2' />
-                      Thông tin phụ huynh
-                    </h3>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 pt-4 border-t border-gray-200'>
+                <div className='space-y-3 sm:space-y-4'>
+                  <h3 className='text-lg md:text-xl font-semibold text-gray-900 flex items-center'>
+                    <Users className='w-5 h-5 md:w-6 md:h-6 mr-2' />
+                    Thông tin đăng nhập
+                  </h3>
 
+                  {customer.cus_user ? (
                     <div className='space-y-2 sm:space-y-3'>
-                      {customer.cus_parentName && (
-                        <div className='flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3'>
-                          <div className='flex items-center space-x-2 sm:space-x-3'>
-                            <User className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
-                            <span className='text-sm md:text-base text-gray-500'>
-                              Tên phụ huynh:
-                            </span>
-                          </div>
-                          <span className='text-sm md:text-base font-medium pl-5 sm:pl-0'>
-                            {customer.cus_parentName}
-                          </span>
-                        </div>
-                      )}
-
-                      {customer.cus_parentDateOfBirth && (
-                        <div className='flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3'>
-                          <div className='flex items-center space-x-2 sm:space-x-3'>
-                            <Calendar className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
-                            <span className='text-sm md:text-base text-gray-500'>
-                              Ngày sinh phụ huynh:
-                            </span>
-                          </div>
-                          <span className='text-sm md:text-base font-medium pl-5 sm:pl-0'>
-                            {format(
-                              new Date(customer.cus_parentDateOfBirth),
-                              'dd/MM/yyyy',
-                              { locale: vi },
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    {customer.cus_accountName && (
                       <div className='flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3'>
                         <div className='flex items-center space-x-2 sm:space-x-3'>
-                          <IdCard className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
+                          <User className='w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0' />
                           <span className='text-sm md:text-base text-gray-500'>
-                            Tên tài khoản Zalo/FB:
+                            Tên đăng nhập:
                           </span>
                         </div>
                         <span className='text-sm md:text-base font-medium pl-5 sm:pl-0'>
-                          {customer.cus_accountName}
+                          {customer.cus_user?.usr_username}
                         </span>
                       </div>
-                    )}
-                  </div>
+                      <p className='text-gray-500 italic'>
+                        Mật khẩu mặc định: 5 số cuối của số điện thoại
+                      </p>
+                    </div>
+                  ) : (
+                    <div className='flex flex-col gap-4'>
+                      <span className='text-gray-500'>
+                        Khách hàng chưa có tài khoản đăng nhập
+                      </span>
+                      <Button
+                        variant='primary'
+                        className='w-fit text-sm sm:text-base px-3 sm:px-4 py-2 sm:py-2'
+                        onClick={handleCreateCustomerAccount}
+                      >
+                        <Plus className='w-4 h-4' />
+                        <span className=''>Tạo tài khoản</span>
+                      </Button>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
               {/* Notes */}
               {customer.cus_notes && (
@@ -346,7 +366,7 @@ export default function CustomerDetail({
                   asChild
                   className='text-sm sm:text-base px-3 sm:px-4 py-2 sm:py-2'
                 >
-                  <Link to='./edit'>
+                  <Link to='./edit' prefetch='intent'>
                     <Edit className='w-4 h-4' />
                     <span className='hidden sm:inline'>
                       Chỉnh sửa thông tin
@@ -360,10 +380,12 @@ export default function CustomerDetail({
                   asChild
                   className='text-sm sm:text-base px-3 sm:px-4 py-2 sm:py-2'
                 >
-                  <Link to={`/erp/cases/new?customerId=${customer?.id || ''}`}>
+                  <Link
+                    to={`/erp/cases/new?customerId=${customer?.id || ''}`}
+                    prefetch='intent'
+                  >
                     <Plus className='w-4 h-4' />
-                    <span className='hidden sm:inline'>Thêm Ca dịch vụ</span>
-                    <span className='sm:hidden'>Thêm hồ sơ</span>
+                    <span className=''>Thêm Ca dịch vụ</span>
                   </Link>
                 </Button>
 
@@ -372,7 +394,7 @@ export default function CustomerDetail({
                   asChild
                   className='text-sm sm:text-base px-3 sm:px-4 py-2 sm:py-2'
                 >
-                  <Link to='/erp/customers'>
+                  <Link to='/erp/customers' prefetch='intent'>
                     <ArrowLeft className='w-4 h-4' />
                     <span className='hidden sm:inline'>Quay lại danh sách</span>
                     <span className='sm:hidden'>Quay lại</span>

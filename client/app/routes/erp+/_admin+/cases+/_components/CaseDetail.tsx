@@ -371,7 +371,7 @@ export default function CaseDetail({
                   asChild
                   className='justify-center sm:justify-start'
                 >
-                  <Link to='./edit'>
+                  <Link to='./edit' prefetch='intent'>
                     <Edit className='w-4 h-4' />
                     <span className='hidden sm:inline'>Chỉnh sửa hồ sơ</span>
                     <span className='sm:hidden'>Chỉnh sửa</span>
@@ -383,7 +383,10 @@ export default function CaseDetail({
                   asChild
                   className='justify-center sm:justify-start'
                 >
-                  <Link to={'/erp/transactions/new?caseId=' + caseService.id}>
+                  <Link
+                    to={'/erp/transactions/new?caseId=' + caseService.id}
+                    prefetch='intent'
+                  >
                     <Plus className='w-4 h-4' />
                     <span className='inline'>Thêm giao dịch</span>
                   </Link>
@@ -394,7 +397,7 @@ export default function CaseDetail({
                   asChild
                   className='justify-center sm:justify-start'
                 >
-                  <Link to='/erp/cases'>
+                  <Link to='/erp/cases' prefetch='intent'>
                     <ArrowLeft className='w-4 h-4' />
                     <span className='hidden sm:inline'>Quay lại danh sách</span>
                     <span className='sm:hidden'>Quay lại</span>

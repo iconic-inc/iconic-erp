@@ -254,6 +254,7 @@ export default function NewCase() {
               <Button variant={'primary'} className='w-full sm:w-auto'>
                 <Link
                   to='/erp/customers'
+                  prefetch='intent'
                   className='flex items-center justify-center'
                 >
                   Chọn Khách hàng

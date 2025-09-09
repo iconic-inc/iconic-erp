@@ -27,6 +27,7 @@ import { IDocumentQuery } from '../interfaces/document.interface';
 import { DocumentModel } from '@models/document.model';
 import { TaskTemplateModel } from '@models/taskTemplate.model';
 import { TaskModel } from '@models/task.model';
+import { getCustomerByUserId } from './customer.service';
 
 // Query interface for case services
 interface ICaseServiceQuery {
@@ -56,6 +57,7 @@ interface ICaseServiceQuery {
   isPhysicalCopySent?: boolean;
   isDeepConsulted?: boolean;
   employeeUserId?: string;
+  customerUserId?: string;
 }
 
 const getCaseServices = async (
@@ -70,7 +72,7 @@ const getCaseServices = async (
   };
 }> => {
   try {
-    const {
+    let {
       page = 1,
       limit = 10,
       search,
@@ -87,6 +89,7 @@ const getCaseServices = async (
       createdAtFrom,
       createdAtTo,
       employeeUserId,
+      customerUserId,
       ...processStatusFilters
     } = query;
 
@@ -140,6 +143,9 @@ const getCaseServices = async (
       }
     }
 
+    if (customerUserId) {
+      customerId = await getCustomerByUserId(customerUserId).id;
+    }
     // Add customer filter if provided
     if (customerId) {
       matchConditions.case_customer = new Types.ObjectId(customerId);
@@ -329,8 +335,6 @@ const getCaseServices = async (
           cus_code: 1,
           cus_createdAt: 1,
           cus_msisdn: 1,
-          cus_parentName: 1,
-          cus_parentDateOfBirth: 1,
         },
         case_date: 1,
         case_appointmentDate: 1,
@@ -439,7 +443,7 @@ const getCaseServiceById = async (id: string) => {
       {
         path: 'case_customer',
         select:
-          'cus_firstName cus_lastName cus_email cus_msisdn cus_code cus_createdAt cus_parentName cus_parentDateOfBirth',
+          'cus_firstName cus_lastName cus_email cus_msisdn cus_code cus_createdAt',
       },
       {
         path: 'case_consultant',

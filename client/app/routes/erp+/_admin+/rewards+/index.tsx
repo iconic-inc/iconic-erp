@@ -78,6 +78,7 @@ export default function RewardsIndex() {
       render: (item) => (
         <Link
           to={`/erp/rewards/${item.id}`}
+          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full font-medium'
         >
           {item.rw_name}

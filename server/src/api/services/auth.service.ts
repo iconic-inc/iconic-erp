@@ -39,14 +39,13 @@ export class AuthService {
   }) {
     const foundUser = await findUserById(username);
 
-    if (!foundUser) {
-      throw new BadRequestError('Email is not registered!');
-    }
+    const isMatchPwd = bcrypt.compareSync(
+      password,
+      foundUser?.usr_password || ''
+    );
 
-    const isMatchPwd = bcrypt.compareSync(password, foundUser.usr_password!);
-
-    if (!isMatchPwd) {
-      throw new BadRequestError('Password mismatch!');
+    if (!foundUser || !isMatchPwd || !password) {
+      throw new BadRequestError('Username hoặc mật khẩu không đúng!');
     }
 
     const { privateKey, publicKey } = generateKeyPair();
@@ -78,6 +77,9 @@ export class AuthService {
   }
 
   static async signUp({ email }: IUserCreate) {
+    if (!email) {
+      throw new BadRequestError('Email is required');
+    }
     const foundUser = await UserModel.findOne({ usr_email: email });
     if (foundUser) {
       throw new Error('Email already exists');

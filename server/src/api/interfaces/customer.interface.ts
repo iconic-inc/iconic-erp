@@ -1,5 +1,6 @@
 import { CUSTOMER } from '@constants/customer.constant';
 import { HydratedDocument, Model, Types } from 'mongoose';
+import { IUserCreate } from './user.interface';
 
 type IAddress = {
   province?: string;
@@ -14,12 +15,11 @@ export interface ICustomerPopulate {
   cus_code: string;
   cus_msisdn: string;
   cus_createdAt: Date;
-  cus_parentName?: string;
-  cus_parentDateOfBirth?: string;
   cus_contactChannel?: string;
 }
 
 export interface ICustomer extends ICustomerPopulate {
+  cus_user?: string;
   cus_email?: string;
   cus_address?: IAddress;
   cus_birthDate?: string;
@@ -38,6 +38,7 @@ export interface ICustomerModel extends Model<ICustomerDocument> {
 }
 
 export interface ICustomerCreate extends Partial<IAddress> {
+  user?: string;
   code: string;
   firstName: string;
   lastName?: string;
@@ -50,9 +51,11 @@ export interface ICustomerCreate extends Partial<IAddress> {
   source?: string;
   notes?: string;
   createdAt?: string;
-  parentName?: string;
-  parentDateOfBirth?: string;
   accountName?: string;
 }
 
 export interface ICustomerUpdate extends Partial<ICustomerCreate> {}
+
+export interface ICustomerUserCreate {
+  customerId: string;
+}

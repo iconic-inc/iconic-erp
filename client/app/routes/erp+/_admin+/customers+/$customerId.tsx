@@ -1,7 +1,10 @@
-import { getCustomerById } from '~/services/customer.server';
+import {
+  createCustomerAccount,
+  getCustomerById,
+} from '~/services/customer.server';
 import { getCaseServices } from '~/services/case.server';
 import { getTransactions } from '~/services/transaction.server';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs, ActionFunctionArgs, data } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { parseAuthCookie } from '~/services/cookie.server';
 import ContentHeader from '~/components/ContentHeader';
@@ -14,6 +17,7 @@ import {
   canAccessTransactionManagement,
   hasRole,
 } from '~/utils/permission';
+import { isAuthenticated } from '~/services/auth.server';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const session = await parseAuthCookie(request);
@@ -122,3 +126,55 @@ export default function CustomerDetails() {
     </div>
   );
 }
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { session, headers } = await isAuthenticated(request);
+  const customerId = params.customerId;
+  if (!customerId) {
+    return data(
+      {
+        message: 'Customer ID is required',
+        type: 'error',
+      },
+      { headers, status: 400 },
+    );
+  }
+
+  try {
+    switch (request.method) {
+      case 'POST':
+        await createCustomerAccount(customerId, session!);
+        return data(
+          {
+            message: 'Đã tạo tài khoản khách hàng thành công!',
+            type: 'success',
+          },
+          { headers, status: 201 },
+        );
+
+      default:
+        return data(
+          {
+            message: 'Method not allowed',
+            type: 'error',
+          },
+          {
+            headers,
+            status: 405,
+          },
+        );
+    }
+  } catch (error: any) {
+    console.error('Error handling customer action:', error);
+    return data(
+      {
+        message: error.message || 'Có lỗi xảy ra',
+        type: 'error',
+      },
+      {
+        headers,
+        status: 500,
+      },
+    );
+  }
+};

@@ -20,6 +20,13 @@ const isValidEmail = (email: string) => {
 // Base schema for common customer fields
 const customerBaseSchema = {
   code: z.string().trim().min(1, 'Mã khách hàng là bắt buộc'),
+  user: z
+    .string()
+    .trim()
+    .refine(isValidObjectId, {
+      message: 'ID người dùng không hợp lệ',
+    })
+    .optional(),
   firstName: z.string().trim().min(1, 'Tên là bắt buộc'),
   lastName: z.string().trim().optional(),
   email: z
@@ -61,8 +68,6 @@ const customerBaseSchema = {
     .default(CUSTOMER.CONTACT_CHANNEL.ZALO.value),
   source: z.string().trim().optional().default(CUSTOMER.SOURCE.FACEBOOK.value),
   notes: z.string().trim().optional(),
-  parentName: z.string().trim().optional(),
-  parentDateOfBirth: z.string().trim().optional(),
   accountName: z.string().trim().optional(),
 };
 
