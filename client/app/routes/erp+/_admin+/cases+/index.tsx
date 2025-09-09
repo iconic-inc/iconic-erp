@@ -148,7 +148,6 @@ export default function CRMCaseService() {
       render: (item) => (
         <Link
           to={`/erp/cases/${item.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full'
         >
           <span className='text-sm sm:text-base truncate block max-w-[150px] sm:max-w-none'>
@@ -167,13 +166,25 @@ export default function CRMCaseService() {
       render: (item) => (
         <Link
           to={`/erp/customers/${item.case_customer.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full'
         >
           <span className='text-sm sm:text-base truncate block max-w-[150px] sm:max-w-none'>
             {item.case_customer.cus_firstName} {item.case_customer.cus_lastName}
           </span>
         </Link>
+      ),
+    },
+    {
+      title: 'Thông tin phụ huynh',
+      key: 'parentData',
+      visible: true,
+      render: (item) => (
+        <div className='flex flex-col gap-1 text-sm sm:text-base'>
+          <span>{item.case_customer.cus_parentName || 'N/A'}</span>
+          <span className='text-gray-500 text-xs sm:text-sm'>
+            {formatDate(item.case_customer.cus_parentDateOfBirth) || 'N/A'}
+          </span>
+        </div>
       ),
     },
     {

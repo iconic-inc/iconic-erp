@@ -221,16 +221,4 @@ export class CaseServiceController {
       metadata: caseServices,
     });
   };
-
-  static getCaseServicesByCustomer = async (req: Request, res: Response) => {
-    const caseServices = await getCaseServices({
-      ...req.query,
-      customerUserId: req.user.userId,
-    });
-    return OK({
-      res,
-      message: 'Case services fetched successfully',
-      metadata: caseServices,
-    });
-  };
 }

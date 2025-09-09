@@ -202,7 +202,6 @@ export default function TaskDetail({
                         </div>
                         <Link
                           to={`/erp/cases/${task.tsk_caseService.id}`}
-                          prefetch='intent'
                           className='text-sm md:text-base font-medium text-blue-600 hover:underline truncate'
                         >
                           {task.tsk_caseService.case_code}
@@ -247,7 +246,7 @@ export default function TaskDetail({
               {/* Actions */}
               <div className='flex flex-col sm:flex-row flex-wrap gap-2 md:gap-3 pt-3 md:pt-4 border-t border-gray-200'>
                 <Button asChild variant={'primary'} className='text-base'>
-                  <Link to='./edit' prefetch='intent'>
+                  <Link to='./edit'>
                     <Edit className='w-4 h-4 md:w-5 md:h-5' />
                     <span className='hidden sm:inline'>
                       Chỉnh sửa công việc
@@ -257,7 +256,7 @@ export default function TaskDetail({
                 </Button>
 
                 <Button asChild variant={'secondary'} className='text-base'>
-                  <Link to='/erp/tasks' prefetch='intent'>
+                  <Link to='/erp/tasks'>
                     <ArrowLeft className='w-4 h-4 md:w-5 md:h-5' />
                     <span className='hidden sm:inline'>Quay lại danh sách</span>
                     <span className='sm:hidden'>Quay lại</span>

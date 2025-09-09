@@ -19,10 +19,24 @@ export const isAdmin = (userRole: IRole | undefined): boolean => {
 };
 
 /**
- * Check if user is customer
+ * Check if user is attorney
  */
-export const isCustomer = (userRole: IRole | undefined): boolean => {
-  return userRole?.slug === 'customer';
+export const isAttorney = (userRole: IRole | undefined): boolean => {
+  return userRole?.slug === 'attorney';
+};
+
+/**
+ * Check if user is specialist
+ */
+export const isSpecialist = (userRole: IRole | undefined): boolean => {
+  return userRole?.slug === 'specialist';
+};
+
+/**
+ * Check if user is accountant
+ */
+export const isAccountant = (userRole: IRole | undefined): boolean => {
+  return userRole?.slug === 'accountant';
 };
 
 /**
@@ -34,12 +48,12 @@ export const getRoleDisplayName = (userRole: IRole | undefined): string => {
   switch (userRole.slug) {
     case 'admin':
       return 'Quản trị hệ thống';
-    case 'employee':
-      return 'Nhân viên';
+    case 'attorney':
+      return 'Luật sư';
+    case 'specialist':
+      return 'Chuyên viên';
     case 'accountant':
       return 'Kế toán';
-    case 'customer':
-      return 'Khách hàng';
     default:
       return userRole.name || 'Không xác định';
   }
@@ -67,7 +81,7 @@ export const canAccessAttendanceManagement = (
  * Check if user can access case services
  */
 export const canAccessCaseServices = (userRole: IRole | undefined): boolean => {
-  return hasRole(userRole, ['admin', 'employee', 'accountant', 'customer']);
+  return hasRole(userRole, ['admin', 'attorney', 'specialist', 'accountant']);
 };
 
 /**
@@ -76,7 +90,7 @@ export const canAccessCaseServices = (userRole: IRole | undefined): boolean => {
 export const canAccessCustomerManagement = (
   userRole: IRole | undefined,
 ): boolean => {
-  return hasRole(userRole, ['admin', 'employee', 'accountant']);
+  return hasRole(userRole, ['admin', 'attorney', 'specialist', 'accountant']);
 };
 
 /**
@@ -85,7 +99,7 @@ export const canAccessCustomerManagement = (
 export const canAccessTaskManagement = (
   userRole: IRole | undefined,
 ): boolean => {
-  return hasRole(userRole, ['admin', 'employee', 'accountant']);
+  return hasRole(userRole, ['admin', 'attorney', 'specialist', 'accountant']);
 };
 
 /**
@@ -103,7 +117,7 @@ export const canAccessTransactionManagement = (
 export const canAccessDocumentManagement = (
   userRole: IRole | undefined,
 ): boolean => {
-  return hasRole(userRole, ['admin', 'employee', 'accountant']);
+  return hasRole(userRole, ['admin', 'attorney', 'specialist', 'accountant']);
 };
 
 /**
@@ -112,5 +126,5 @@ export const canAccessDocumentManagement = (
 export const canAccessRewardManagement = (
   userRole: IRole | undefined,
 ): boolean => {
-  return hasRole(userRole, ['admin', 'employee', 'accountant']);
+  return hasRole(userRole, ['admin', 'attorney', 'specialist', 'accountant']);
 };

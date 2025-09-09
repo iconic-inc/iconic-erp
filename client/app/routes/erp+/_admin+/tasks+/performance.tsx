@@ -123,7 +123,6 @@ export default function TaskPerformancePage() {
           <div className='min-w-0 flex-1'>
             <Link
               to={`/erp/employees/${employee.employeeId}`}
-              prefetch='intent'
               className='font-semibold text-sm sm:text-base text-gray-900 hover:text-red-900 transition-colors block truncate'
             >
               {employee.employeeName}
@@ -218,10 +217,7 @@ export default function TaskPerformancePage() {
             asChild
             className='text-xs px-2 py-1'
           >
-            <Link
-              to={`/erp/employees/${employee.employeeId}`}
-              prefetch='intent'
-            >
+            <Link to={`/erp/employees/${employee.employeeId}`}>
               <User className='w-3 h-3 sm:w-4 sm:h-4 mr-1' />
               <span className='hidden sm:inline'>Chi tiết</span>
               <span className='sm:hidden'>Xem</span>

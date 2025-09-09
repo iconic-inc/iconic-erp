@@ -145,20 +145,4 @@ const ROLES = [
       },
     ],
   },
-  {
-    name: 'Khách hàng',
-    slug: 'customer',
-    status: 'active',
-    description: 'Khách hàng',
-    grants: [
-      {
-        resourceId: { slug: 'customer' }, //68870ef9ed44c8a92ee0fadd
-        actions: ['read:own', 'update:own'],
-      },
-      {
-        resourceId: { slug: 'caseService' }, //68870ef9ed44c8a92ee0fadb
-        actions: ['read:own'],
-      },
-    ],
-  },
 ];

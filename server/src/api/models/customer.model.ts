@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { CUSTOMER, USER } from '../constants';
+import { CUSTOMER } from '../constants';
 import {
   ICustomerCreate,
   ICustomerDocument,
@@ -14,10 +14,6 @@ const customerSchema = new Schema<ICustomerDocument, ICustomerModel>(
       trim: true,
       required: true,
       unique: true,
-    },
-    cus_user: {
-      type: Schema.Types.ObjectId,
-      ref: USER.DOCUMENT_NAME,
     },
     cus_firstName: {
       type: String,
@@ -62,6 +58,14 @@ const customerSchema = new Schema<ICustomerDocument, ICustomerModel>(
       default: 'Facebook',
     },
     cus_notes: {
+      type: String,
+      trim: true,
+    },
+    cus_parentName: {
+      type: String,
+      trim: true,
+    },
+    cus_parentDateOfBirth: {
       type: String,
       trim: true,
     },

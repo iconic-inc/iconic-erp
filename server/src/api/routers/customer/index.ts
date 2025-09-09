@@ -14,14 +14,6 @@ const router = Router();
 // Require authentication for all routes
 router.use(authenticationV2);
 
-router.use('/me/case-services', require('../caseService/customer'));
-
-router.get(
-  '/me',
-  hasPermission('customer', 'readOwn'),
-  CustomerController.getCurrentCustomer
-);
-
 // Route để xuất danh sách nhân viên sang XLSX
 router.get(
   '/export/xlsx',
@@ -50,14 +42,6 @@ router.get(
   '/',
   hasPermission('customer', 'readAny'),
   CustomerController.getCustomers
-);
-
-// Create customer account
-router.post(
-  '/:id/account',
-  validateObjectId('id'),
-  hasPermission('customer', 'createAny'),
-  CustomerController.createCustomerAccount
 );
 
 // Create new customer

@@ -137,7 +137,6 @@ export default function EmployeeAttendanceRequestList({
       render: (item) => (
         <Link
           to={`../attendance-requests/${item.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline block w-full h-full'
         >
           <div className='flex items-center space-x-2 md:space-x-3'>

@@ -19,8 +19,8 @@ const userSchema = new Schema<IUserDocument, IUserModel>(
     usr_email: {
       type: String,
       unique: true,
+      required: true,
       trim: true,
-      sparse: true, // Only apply unique constraint to non-null values
     },
     usr_firstName: {
       type: String,

@@ -500,9 +500,7 @@ export default function TaskDetailForm({
                 asChild
                 className='text-sm sm:text-base'
               >
-                <Link prefetch='intent' to={`/erp/cases`}>
-                  Chọn hồ sơ liên quan
-                </Link>
+                <Link to={`/erp/cases`}>Chọn hồ sơ liên quan</Link>
               </Button>
             </div>
           )}
@@ -641,7 +639,6 @@ export default function TaskDetailForm({
         <CardFooter className='px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center border-t border-gray-200 gap-3 sm:gap-0'>
           <Link
             to='/erp/tasks'
-            prefetch='intent'
             className='bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm flex items-center transition-all duration-300 w-full sm:w-auto justify-center'
           >
             <ArrowLeft className='h-4 w-4 mr-1' />
