@@ -180,7 +180,6 @@ export default function TransactionDetail({
                       </span>
                       <Link
                         to={`/erp/employees/${transaction.tx_createdBy?.id}`}
-                        prefetch='intent'
                         className='text-sm sm:text-sm font-medium text-blue-600 hover:underline break-words'
                       >
                         {transaction.tx_createdBy?.emp_user.usr_firstName}{' '}
@@ -197,7 +196,6 @@ export default function TransactionDetail({
                         </span>
                         <Link
                           to={`/erp/customers/${transaction.tx_customer.id}`}
-                          prefetch='intent'
                           className='text-sm sm:text-sm font-medium text-blue-600 hover:underline break-words'
                         >
                           {transaction.tx_customer.cus_firstName}{' '}
@@ -215,7 +213,6 @@ export default function TransactionDetail({
                         </span>
                         <Link
                           to={`/erp/cases/${transaction.tx_caseService.id}`}
-                          prefetch='intent'
                           className='text-sm sm:text-sm font-medium text-blue-600 hover:underline break-words'
                         >
                           {transaction.tx_caseService.case_code} -{' '}

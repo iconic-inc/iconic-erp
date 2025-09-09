@@ -124,7 +124,6 @@ export default function HRMCustomers() {
       render: (customer: ICustomer) => (
         <Link
           to={`/erp/customers/${customer.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline flex items-center'
         >
           <Avatar className='w-6 h-6 sm:w-8 sm:h-8 mr-2 shrink-0'>
@@ -156,7 +155,6 @@ export default function HRMCustomers() {
         customer.cus_msisdn ? (
           <Link
             to={`tel:${customer.cus_msisdn}`}
-            prefetch='intent'
             className='text-blue-600 hover:underline text-xs sm:text-sm truncate block max-w-[120px] sm:max-w-none'
             onClick={(e) => e.stopPropagation()}
           >
@@ -281,10 +279,7 @@ export default function HRMCustomers() {
           asChild
           className='text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2'
         >
-          <Link
-            to={`/erp/cases/new?customerId=${customer?.id || ''}`}
-            prefetch='intent'
-          >
+          <Link to={`/erp/cases/new?customerId=${customer?.id || ''}`}>
             <span className='hidden sm:inline'>Thêm Ca dịch vụ</span>
             <span className='sm:hidden'>Thêm vụ việc</span>
           </Link>

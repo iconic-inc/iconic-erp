@@ -99,7 +99,6 @@ export default function HRMTasks() {
       render: (task) => (
         <Link
           to={`/erp/tasks/${task.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline py-2'
         >
           {task.tsk_name}
@@ -130,7 +129,6 @@ export default function HRMTasks() {
         task.tsk_caseService ? (
           <Link
             to={`/erp/cases/${task.tsk_caseService?.id}`}
-            prefetch='intent'
             className='text-blue-600 hover:underline'
           >
             {task.tsk_caseService?.case_code}

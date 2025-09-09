@@ -79,7 +79,7 @@ export function NavUser({
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link to='/erp/profile' prefetch='intent'>
+              <Link to='/erp/profile'>
                 <DropdownMenuItem>
                   <BadgeCheck />
                   Account

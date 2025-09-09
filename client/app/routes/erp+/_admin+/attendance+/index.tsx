@@ -53,7 +53,7 @@ export default function IndexAttendance() {
       <ContentHeader
         title='Chấm công'
         actionContent={
-          <Link to='../attendance-requests' prefetch='intent'>
+          <Link to='../attendance-requests'>
             <Button
               variant='outline'
               className='flex items-center gap-2 text-xs md:text-sm'

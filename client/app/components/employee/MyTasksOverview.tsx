@@ -48,11 +48,7 @@ export default function MyTasksOverview({
             Công việc của tôi
           </CardTitle>
           <Button variant='ghost' size='sm' asChild>
-            <Link
-              to='/erp/nhan-vien/tasks'
-              prefetch='intent'
-              className='flex items-center'
-            >
+            <Link to='/erp/nhan-vien/tasks' className='flex items-center'>
               Xem tất cả
               <ArrowUpRight className='w-4 h-4 ml-1' />
             </Link>
@@ -113,7 +109,6 @@ export default function MyTasksOverview({
               <div className='flex items-start justify-between mb-2'>
                 <Link
                   to={`/erp/tasks/${task.id}`}
-                  prefetch='intent'
                   className='font-medium text-sm hover:text-red-500 transition-colors flex-1 mr-2'
                 >
                   {task.tsk_name}

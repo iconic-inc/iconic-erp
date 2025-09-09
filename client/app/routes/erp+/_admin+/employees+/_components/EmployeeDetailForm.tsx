@@ -719,7 +719,6 @@ export default function EmployeeDetailForm({
                 <div className='w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3'>
                   <Link
                     to='/erp/employees'
-                    prefetch='intent'
                     className='bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm flex items-center justify-center transition-all duration-300 order-2 sm:order-1'
                   >
                     <ArrowLeft className='w-4 h-4 mr-1' />

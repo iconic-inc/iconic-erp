@@ -56,7 +56,6 @@ export default function CaseTaskList({
       render: (task) => (
         <Link
           to={`/erp/tasks/${task.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline py-2'
         >
           {task.tsk_name}
@@ -163,12 +162,7 @@ export default function CaseTaskList({
             <CardContent className='p-2 md:p-6 space-y-4'>
               <div className='flex justify-end'>
                 <Button variant='primary' className='px-4 py-2'>
-                  <Link
-                    to={`/erp/tasks/new?caseId=${caseId}`}
-                    prefetch='intent'
-                  >
-                    Thêm Task
-                  </Link>
+                  <Link to={`/erp/tasks/new?caseId=${caseId}`}>Thêm Task</Link>
                 </Button>
               </div>
 

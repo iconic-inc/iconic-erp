@@ -1,5 +1,4 @@
 import { CUSTOMER } from '~/constants/customer.constant';
-import { IUserBrief, IUserCreate } from './user.interface';
 
 type IAddress = {
   province?: string;
@@ -13,11 +12,12 @@ export interface ICustomerBrief {
   cus_lastName: string;
   cus_code: string;
   cus_createdAt: string;
+  cus_parentName?: string;
+  cus_parentDateOfBirth?: string;
   cus_msisdn: string;
 }
 
 export interface ICustomer extends ICustomerBrief {
-  cus_user?: Pick<IUserBrief, 'id' | 'usr_username'>;
   cus_email?: string;
   cus_address?: IAddress;
   cus_birthDate?: string;
@@ -45,6 +45,8 @@ export interface ICustomerCreate extends Partial<IAddress> {
   source?: string;
   notes?: string;
   createdAt?: string;
+  parentName?: string;
+  parentDateOfBirth?: string;
   accountName?: string;
 }
 
@@ -58,8 +60,4 @@ export interface ICustomerStatisticsQuery {
     start: string;
     end: string;
   };
-}
-
-export interface ICustomerUserCreate {
-  customerId: string;
 }

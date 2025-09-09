@@ -9,8 +9,6 @@ import {
   deleteMultipleCustomers,
   exportCustomersToXLSX,
   importCustomersFromXLSX,
-  createCustomerAccount,
-  getCustomerByUserId,
 } from '@services/customer.service';
 import { BadRequestError } from '../core/errors';
 
@@ -106,24 +104,6 @@ export class CustomerController {
       res,
       message: 'Customers imported successfully',
       metadata: result,
-    });
-  }
-
-  static async createCustomerAccount(req: Request, res: Response) {
-    const customerId = req.params.id;
-    const result = await createCustomerAccount(customerId);
-    return OK({
-      res,
-      message: 'Tạo tài khoản khách hàng thành công',
-      metadata: result,
-    });
-  }
-
-  static async getCurrentCustomer(req: Request, res: Response) {
-    return OK({
-      res,
-      message: 'Lấy thông tin khách hàng hiện tại thành công',
-      metadata: await getCustomerByUserId(req.user.userId),
     });
   }
 }

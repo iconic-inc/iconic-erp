@@ -63,7 +63,6 @@ export default function HRMEmployees() {
       render: (item) => (
         <Link
           to={`/erp/employees/${item.id}`}
-          prefetch='intent'
           className='text-blue-600 hover:underline flex items-center'
         >
           <Avatar className='w-6 h-6 sm:w-8 sm:h-8 mr-2 shrink-0'>

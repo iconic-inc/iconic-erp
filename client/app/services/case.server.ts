@@ -29,16 +29,6 @@ const getCaseServiceById = async (id: string, request: ISessionUser) => {
   return response as ICaseService;
 };
 
-const getMyCustomerCaseServiceById = async (
-  id: string,
-  request: ISessionUser,
-) => {
-  const response = await fetcher<any>(`/customers/me/case-services/${id}`, {
-    request,
-  });
-  return response as ICaseService;
-};
-
 // get task associated with a case service
 const getCaseServiceTasks = async (id: string, request: ISessionUser) => {
   const tasks = await fetcher<IListResponse<ITask>>(
@@ -237,17 +227,6 @@ const getMyCaseServices = async (
   return response;
 };
 
-const getMyCustomerCaseServices = async (
-  searchParams: URLSearchParams,
-  request: ISessionUser,
-) => {
-  const response = await fetcher<IListResponse<ICaseService>>(
-    `/customers/me/case-services?${searchParams.toString()}`,
-    { request },
-  );
-  return response;
-};
-
 export {
   getCaseServices,
   getCaseServiceById,
@@ -262,6 +241,4 @@ export {
   getCaseServiceTasks,
   getCaseServiceDocuments,
   getMyCaseServices,
-  getMyCustomerCaseServices,
-  getMyCustomerCaseServiceById,
 };
